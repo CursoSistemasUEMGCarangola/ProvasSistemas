@@ -11,22 +11,28 @@ import { Prova, Turma } from '@/types'
 export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }) {
   const [search, setSearch] = useState('')
   const [turmaFilter, setTurmaFilter] = useState('todas')
+  const [tipoFilter, setTipoFilter] = useState('todos')
+
+  const tiposAvaliacao = useMemo(() => {
+    return Array.from(new Set(exams.map(e => e.tipo_avaliacao))).sort()
+  }, [exams])
 
   const filteredExams = useMemo(() => {
     return exams.filter((exam) => {
       const matchSearch = exam.disciplinas?.nome?.toLowerCase().includes(search.toLowerCase()) || 
                           exam.professores?.nome?.toLowerCase().includes(search.toLowerCase())
       const matchTurma = turmaFilter === 'todas' || exam.turma_id === turmaFilter
-      return matchSearch && matchTurma
+      const matchTipo = tipoFilter === 'todos' || exam.tipo_avaliacao === tipoFilter
+      return matchSearch && matchTurma && matchTipo
     })
-  }, [exams, search, turmaFilter])
+  }, [exams, search, turmaFilter, tipoFilter])
 
   return (
     <div className="space-y-6">
       {/* Filters */}
       <div className="bg-card p-4 rounded-xl shadow-sm border space-y-4">
         <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wider">Filtros de Busca</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input 
@@ -49,6 +55,19 @@ export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }
               ))}
             </SelectContent>
           </Select>
+          <Select value={tipoFilter} onValueChange={(val) => setTipoFilter(val || 'todos')}>
+            <SelectTrigger>
+              <SelectValue placeholder="Todos os tipos">
+                {tipoFilter === 'todos' ? 'Todos os tipos' : tipoFilter}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos os tipos</SelectItem>
+              {tiposAvaliacao.map(t => (
+                <SelectItem key={t} value={t}>{t}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -66,6 +85,7 @@ export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }
               const dateObj = new Date(exam.data_hora_inicio)
               const formattedDate = dateObj.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit' })
               const formattedTime = dateObj.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' })
+              const hasTime = formattedTime !== '00:00';
 
               return (
                 <Card key={exam.id} className="hover:shadow-md transition-shadow [--card-spacing:0.5rem]">
@@ -76,7 +96,7 @@ export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }
                       </CardTitle>
                       <div className="text-right flex-shrink-0 leading-tight">
                         <div className="text-base font-bold text-primary">{formattedDate}</div>
-                        <div className="text-[11px] text-muted-foreground">{formattedTime}</div>
+                        {hasTime && <div className="text-[11px] text-muted-foreground">{formattedTime}</div>}
                       </div>
                     </div>
                   </CardHeader>
@@ -87,8 +107,8 @@ export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }
                     </div>
                     <div>Prof. {exam.professores?.nome}</div>
                     {exam.observacoes && (
-                      <div className="text-[11px] bg-muted/50 p-1.5 mt-1 rounded truncate leading-tight" title={exam.observacoes}>
-                        {exam.observacoes}
+                      <div className="text-[11px] bg-muted p-1.5 mt-1 rounded truncate leading-tight font-bold text-foreground border" title={exam.observacoes}>
+                        Obs: {exam.observacoes}
                       </div>
                     )}
                   </CardContent>

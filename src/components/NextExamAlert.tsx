@@ -9,6 +9,7 @@ export function NextExamAlert({ exam }: { exam: Prova | null }) {
   const dateObj = new Date(exam.data_hora_inicio)
   const formattedDate = dateObj.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', weekday: 'long', day: '2-digit', month: 'long' })
   const formattedTime = dateObj.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' })
+  const timeDisplay = formattedTime === '00:00' ? '' : ` às ${formattedTime}`;
 
   return (
     <Card className="border-l-4 border-l-secondary shadow-md bg-secondary/5 [--card-spacing:0.5rem]">
@@ -29,7 +30,7 @@ export function NextExamAlert({ exam }: { exam: Prova | null }) {
         <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
           <div className="flex items-center text-xs text-muted-foreground gap-1">
             <CalendarDays className="h-4 w-4 text-secondary" />
-            <span className="capitalize">{formattedDate} às {formattedTime}</span>
+            <span className="capitalize">{formattedDate}{timeDisplay}</span>
           </div>
           <div className="flex items-center text-xs text-muted-foreground gap-1">
             <MapPin className="h-3 w-3 text-secondary" />
@@ -37,8 +38,8 @@ export function NextExamAlert({ exam }: { exam: Prova | null }) {
           </div>
         </div>
         {exam.observacoes && (
-          <p className="mt-1 text-[11px] bg-background p-1.5 rounded border text-muted-foreground leading-tight">
-            <strong>Obs:</strong> {exam.observacoes}
+          <p className="mt-2 text-[11px] bg-muted p-2 rounded-md border text-foreground font-bold leading-tight">
+            Obs: {exam.observacoes}
           </p>
         )}
       </CardContent>
