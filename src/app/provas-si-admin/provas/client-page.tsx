@@ -26,6 +26,9 @@ export function ProvasClient({ provas, disciplinas, professores, turmas, tiposAv
     if (res?.error) {
       setError(res.error)
     } else {
+      if (res?.warning) {
+        alert(res.warning)
+      }
       setOpen(false)
       setEditingItem(null)
     }
@@ -50,10 +53,10 @@ export function ProvasClient({ provas, disciplinas, professores, turmas, tiposAv
               <DialogHeader>
                 <DialogTitle>{editingItem ? 'Editar Avaliação' : 'Agendar Avaliação'}</DialogTitle>
                 <DialogDescription>
-                  {editingItem ? 'Edite os dados da prova. O sistema validará se a nova data gera conflito.' : 'Preencha os dados da prova. O sistema não permitirá choque de datas para a mesma turma.'}
+                  {editingItem ? 'Edite os dados da prova. O sistema emitirá um alerta caso a nova data gere conflito.' : 'Preencha os dados da prova. O sistema emitirá um alerta caso já exista avaliação para a turma nesta data.'}
                 </DialogDescription>
               </DialogHeader>
-              
+
               {error && (
                 <div className="bg-destructive/15 text-destructive p-3 rounded-md text-sm mt-2">
                   {error}
@@ -137,7 +140,7 @@ export function ProvasClient({ provas, disciplinas, professores, turmas, tiposAv
 
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="observacoes" className="text-right">Observações</Label>
-                  <Input id="observacoes" name="observacoes" placeholder="Ex: Laboratório 1" className="col-span-3" defaultValue={editingItem?.observacoes || ''} />
+                  <Input id="observacoes" name="observacoes" placeholder="Ex: EaD" className="col-span-3" defaultValue={editingItem?.observacoes || ''} />
                 </div>
               </div>
               <DialogFooter>
@@ -171,11 +174,11 @@ export function ProvasClient({ provas, disciplinas, professores, turmas, tiposAv
                 const dateObj = new Date(p.data_hora_inicio)
                 const formattedDate = dateObj.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })
                 const formattedTime = dateObj.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' })
-                
+
                 return (
                   <TableRow key={p.id}>
                     <TableCell>
-                      <span className="font-semibold">{formattedDate}</span><br/>
+                      <span className="font-semibold">{formattedDate}</span><br />
                       <span className="text-xs text-muted-foreground">{formattedTime}</span>
                     </TableCell>
                     <TableCell>{p.turmas?.nome || '-'}</TableCell>

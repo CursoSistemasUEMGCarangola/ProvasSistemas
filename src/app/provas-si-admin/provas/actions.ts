@@ -53,9 +53,7 @@ export async function addProva(formData: FormData) {
     return { error: 'Erro ao verificar disponibilidade de horário' }
   }
 
-  if (conflitos && conflitos.length > 0) {
-    return { error: 'A turma selecionada já possui uma avaliação agendada para esta mesma data.' }
-  }
+  const hasConflict = conflitos && conflitos.length > 0;
 
   const { error } = await supabase.from('provas').insert({
     ...data,
@@ -67,7 +65,10 @@ export async function addProva(formData: FormData) {
   }
 
   revalidatePath('/provas-si-admin/provas')
-  return { success: true }
+  return { 
+    success: true, 
+    warning: hasConflict ? 'Atenção: A turma selecionada já possui uma avaliação agendada para esta mesma data.' : undefined 
+  }
 }
 
 export async function editProva(formData: FormData) {
@@ -111,9 +112,7 @@ export async function editProva(formData: FormData) {
     return { error: 'Erro ao verificar disponibilidade de horário' }
   }
 
-  if (conflitos && conflitos.length > 0) {
-    return { error: 'A turma selecionada já possui uma avaliação agendada para esta mesma data.' }
-  }
+  const hasConflict = conflitos && conflitos.length > 0;
 
   const { error } = await supabase.from('provas').update({
     ...data,
@@ -124,7 +123,10 @@ export async function editProva(formData: FormData) {
   }
 
   revalidatePath('/provas-si-admin/provas')
-  return { success: true }
+  return { 
+    success: true, 
+    warning: hasConflict ? 'Atenção: A turma selecionada já possui uma avaliação agendada para esta mesma data.' : undefined 
+  }
 }
 
 export async function deleteProva(id: string) {
