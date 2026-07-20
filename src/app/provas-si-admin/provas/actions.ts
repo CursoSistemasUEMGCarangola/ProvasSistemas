@@ -29,7 +29,7 @@ export async function addProva(formData: FormData) {
   const result = provaSchema.safeParse(rawData)
 
   if (!result.success) {
-    return { error: result.error.errors[0].message }
+    return { error: result.error.issues[0].message }
   }
 
   const data = result.data
@@ -88,7 +88,7 @@ export async function editProva(formData: FormData) {
   const result = provaSchema.safeParse(rawData)
 
   if (!result.success) {
-    return { error: result.error.errors[0].message }
+    return { error: result.error.issues[0].message }
   }
 
   const data = result.data

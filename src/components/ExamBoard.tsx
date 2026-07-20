@@ -36,7 +36,7 @@ export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <Select value={turmaFilter} onValueChange={setTurmaFilter}>
+          <Select value={turmaFilter} onValueChange={(val) => setTurmaFilter(val || 'todas')}>
             <SelectTrigger>
               <SelectValue placeholder="Todas as turmas">
                 {turmaFilter === 'todas' ? 'Todas as turmas' : turmas.find(t => t.id === turmaFilter)?.nome}
