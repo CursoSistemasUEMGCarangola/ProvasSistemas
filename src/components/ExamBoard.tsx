@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Search } from 'lucide-react'
 import { Prova, Turma } from '@/types'
+import { NextExamAlert } from '@/components/NextExamAlert'
 
 export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }) {
   const [search, setSearch] = useState('')
@@ -27,8 +28,22 @@ export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }
     })
   }, [exams, search, turmaFilter, tipoFilter])
 
+  const nextExam = filteredExams.length > 0 ? filteredExams[0] : null
+
   return (
     <div className="space-y-6">
+      {/* Alerta da Próxima Prova Dinâmico */}
+      <section>
+        {nextExam ? (
+          <NextExamAlert exam={nextExam} />
+        ) : (
+          <div className="bg-green-50 text-green-800 p-4 rounded-xl border border-green-200 text-center shadow-sm">
+            <h3 className="font-bold text-lg">Tudo tranquilo!</h3>
+            <p>Não há provas agendadas para os próximos dias com estes filtros.</p>
+          </div>
+        )}
+      </section>
+
       {/* Filters */}
       <div className="bg-card p-4 rounded-xl shadow-sm border space-y-4">
         <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wider">Filtros de Busca</h3>

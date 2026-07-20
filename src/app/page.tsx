@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server'
-import { NextExamAlert } from '@/components/NextExamAlert'
 import { ExamBoard } from '@/components/ExamBoard'
 import { Button } from '@/components/ui/button'
 import { FileDown } from 'lucide-react'
@@ -47,8 +46,6 @@ export default async function PublicHome() {
     return discA.localeCompare(discB, 'pt-BR')
   })
 
-  const nextExam = exams.length > 0 ? exams[0] : null
-
   return (
     <div className="min-h-screen bg-muted/20 pb-12 transition-colors duration-300">
       {/* Header Institucional */}
@@ -77,14 +74,6 @@ export default async function PublicHome() {
               </div>
             )}
           </div>
-          {nextExam ? (
-            <NextExamAlert exam={nextExam} />
-          ) : (
-            <div className="bg-green-50 text-green-800 p-4 rounded-xl border border-green-200 text-center shadow-sm">
-              <h3 className="font-bold text-lg">Tudo tranquilo!</h3>
-              <p>Não há provas agendadas para os próximos dias.</p>
-            </div>
-          )}
         </section>
 
         {/* Board de Filtros e Listagem */}
