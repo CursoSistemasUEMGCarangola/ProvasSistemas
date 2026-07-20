@@ -64,30 +64,30 @@ export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredExams.map((exam) => {
               const dateObj = new Date(exam.data_hora_inicio)
-              const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
-              const formattedTime = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+              const formattedDate = dateObj.toLocaleDateString('pt-BR', { timeZone: 'UTC', day: '2-digit', month: '2-digit' })
+              const formattedTime = dateObj.toLocaleTimeString('pt-BR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })
 
               return (
                 <Card key={exam.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader className="p-4 pb-2">
+                  <CardHeader className="p-3 pb-0">
                     <div className="flex justify-between items-start gap-2">
-                      <CardTitle className="text-lg leading-tight line-clamp-2">
+                      <CardTitle className="text-base leading-tight line-clamp-2">
                         {exam.disciplinas?.nome}
                       </CardTitle>
-                      <div className="text-right flex-shrink-0">
-                        <div className="text-lg font-bold text-primary">{formattedDate}</div>
-                        <div className="text-xs text-muted-foreground">{formattedTime}</div>
+                      <div className="text-right flex-shrink-0 leading-tight">
+                        <div className="text-base font-bold text-primary">{formattedDate}</div>
+                        <div className="text-[11px] text-muted-foreground">{formattedTime}</div>
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent className="p-4 pt-2 text-sm text-muted-foreground space-y-2">
-                    <div className="flex justify-between items-center">
+                  <CardContent className="p-3 pt-1 text-xs text-muted-foreground">
+                    <div className="flex justify-between items-center mb-1">
                       <span className="font-medium text-foreground">{exam.turmas?.nome}</span>
                       <Badge variant="outline">{exam.tipo_avaliacao}</Badge>
                     </div>
                     <div>Prof. {exam.professores?.nome}</div>
                     {exam.observacoes && (
-                      <div className="text-xs bg-muted/50 p-2 rounded truncate" title={exam.observacoes}>
+                      <div className="text-[11px] bg-muted/50 p-1.5 mt-1 rounded truncate leading-tight" title={exam.observacoes}>
                         {exam.observacoes}
                       </div>
                     )}

@@ -7,12 +7,12 @@ export function NextExamAlert({ exam }: { exam: Prova | null }) {
   if (!exam) return null
 
   const dateObj = new Date(exam.data_hora_inicio)
-  const formattedDate = dateObj.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' })
-  const formattedTime = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+  const formattedDate = dateObj.toLocaleDateString('pt-BR', { timeZone: 'UTC', weekday: 'long', day: '2-digit', month: 'long' })
+  const formattedTime = dateObj.toLocaleTimeString('pt-BR', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })
 
   return (
     <Card className="border-l-4 border-l-secondary shadow-md bg-secondary/5">
-      <CardHeader className="pb-2">
+      <CardHeader className="p-3 pb-0">
         <div className="flex justify-between items-start">
           <div>
             <CardDescription className="text-secondary font-semibold uppercase tracking-wider text-xs mb-1">
@@ -25,19 +25,19 @@ export function NextExamAlert({ exam }: { exam: Prova | null }) {
           </Badge>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-          <div className="flex items-center text-sm text-muted-foreground gap-2">
+      <CardContent className="p-3 pt-1">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+          <div className="flex items-center text-xs text-muted-foreground gap-1">
             <CalendarDays className="h-4 w-4 text-secondary" />
             <span className="capitalize">{formattedDate} às {formattedTime}</span>
           </div>
-          <div className="flex items-center text-sm text-muted-foreground gap-2">
-            <MapPin className="h-4 w-4 text-secondary" />
+          <div className="flex items-center text-xs text-muted-foreground gap-1">
+            <MapPin className="h-3 w-3 text-secondary" />
             <span>Turma: {exam.turmas?.nome}</span>
           </div>
         </div>
         {exam.observacoes && (
-          <p className="mt-4 text-sm bg-background p-2 rounded-md border text-muted-foreground">
+          <p className="mt-1 text-[11px] bg-background p-1.5 rounded border text-muted-foreground leading-tight">
             <strong>Obs:</strong> {exam.observacoes}
           </p>
         )}
