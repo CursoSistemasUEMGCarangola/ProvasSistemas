@@ -60,21 +60,24 @@ export default async function PublicHome() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 mt-8 space-y-8">
-        {/* Alerta da Próxima Prova */}
-        {documentos && documentos.length > 0 && (
-          <section>
-            <div className="flex flex-col sm:flex-row justify-end items-start sm:items-center gap-4 mb-4">
-              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-                {documentos.map((doc) => (
-                  <Button key={doc.id} render={<a href={doc.url} target="_blank" rel="noopener noreferrer" />} variant="outline" className="w-full sm:w-auto gap-2 border-primary/20 hover:bg-primary/5 text-primary">
-                    <FileDown className="h-4 w-4" />
-                    {doc.titulo}
-                  </Button>
-                ))}
-              </div>
+        {/* Alerta da Próxima Prova e Botões Auxiliares */}
+        <section>
+          <div className="flex flex-col sm:flex-row justify-end items-start sm:items-center gap-4 mb-4">
+            <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+              {documentos && documentos.length > 0 && documentos.map((doc) => (
+                <Button key={doc.id} render={<a href={doc.url} target="_blank" rel="noopener noreferrer" />} variant="outline" className="w-full sm:w-auto gap-2 border-primary/20 hover:bg-primary/5 text-primary">
+                  <FileDown className="h-4 w-4" />
+                  {doc.titulo}
+                </Button>
+              ))}
+              <Button asChild variant="default" className="w-full sm:w-auto gap-2 bg-primary text-white hover:bg-primary/90">
+                <Link href="/professores">
+                  Agenda dos Professores
+                </Link>
+              </Button>
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
         {/* Board de Filtros e Listagem */}
         <section>
