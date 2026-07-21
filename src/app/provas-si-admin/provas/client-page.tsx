@@ -80,7 +80,7 @@ export function ProvasClient({ provas, disciplinas, turmas, tiposAvaliacao }: { 
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label className="text-right">Turma</Label>
                   <div className="col-span-3">
-                    <Select name="turma_id" required value={selectedTurmaId || undefined} onValueChange={(val) => { setSelectedTurmaId(val); setSelectedDisciplinaId(''); }}>
+                    <Select name="turma_id" required value={selectedTurmaId || undefined} onValueChange={(val) => { setSelectedTurmaId(val || ''); setSelectedDisciplinaId(''); }}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecione a turma" />
                       </SelectTrigger>
