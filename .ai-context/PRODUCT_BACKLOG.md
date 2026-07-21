@@ -11,17 +11,18 @@
 
 ### Epic 2: Visualização Pública (Alunos)
 
-- **Feature 2.1:** Interface Mobile-first de Calendário / Lista de Próximas Provas.
-- **Feature 2.2:** Filtros dinâmicos (Disciplina, Turma, Professor, Status).
+- **Feature 2.1:** Interface Mobile-first de Calendário / Lista de Próximas Provas. **[Entregue]**
+- **Feature 2.2:** Filtros dinâmicos (Disciplina, Turma, Professor, Status). **[Entregue]**
 - **Feature 2.3:** Detalhes da Prova (modal ou página interna).
-- **Feature 2.4:** Alerta dinâmico no topo informando a próxima prova geral.
+- **Feature 2.4:** Alerta dinâmico no topo informando a próxima prova geral. **[Entregue]**
 - **Feature 2.5:** Exportação do Calendário Completo para PDF (Offline Support).
 - **Feature 2.6:** Alerta visual de falha de conexão de internet.
+- **Feature 2.7:** Páginas de Conformidade Institucional (Termos, Sobre, Privacidade LGPD) **[Entregue]**
 
 ### Epic 3: Área Administrativa (Coordenador)
 
-- **Feature 3.1:** Login Seguro (Supabase Auth).
-- **Feature 3.2:** Gerenciamento de Entidades (Semestres, Turmas, Disciplinas e Professores).
+- **Feature 3.1:** Login Seguro (Supabase Auth). **[Entregue]**
+- **Feature 3.2:** Gerenciamento de Entidades (Semestres, Turmas, Disciplinas e Professores) com validação estrita (Zod / Zero Trust). **[Entregue]**
 - **Feature 3.3:** CRUD de Provas (Agendamento, cancelamento, adiamento, com tracking de status).
 - **Feature 3.4:** Validação de conflito de horário/turma no backend ao salvar.
 

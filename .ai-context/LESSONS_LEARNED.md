@@ -10,3 +10,10 @@ Este documento atua como um registro cumulativo de decisões arquiteturais, vuln
 ## Funcionalidade e Regras de Negócio
 
 * **[Provas] Checagem de Choque de Horário**: A regra de impedir que uma turma tenha provas sobrepostas ou na mesma data exigiu manipulação de Timezones via JS para construir os limiares `startOfDay` e `endOfDay` (UTC) antes de delegar a filtragem `gte` e `lte` para o Supabase.
+
+## Infraestrutura e Vercel Build
+
+* **[Build] Conflito Turbopack vs PWA Plugins**: O build Vercel quebra (Deprecation/Plugin Error) com bibliotecas como `@serwist/next` devido à imposição do Turbopack nas versões recentes do Next.js.
+  * *Resolução*: No `package.json`, usar `next build --webpack` em vez de apenas `next build`.
+* **[TypeScript] Escopo do Service Worker**: Um arquivo `sw.ts` customizado falhará no build de tipagem pois o Next.js não carrega o objeto `ServiceWorkerGlobalScope`.
+  * *Resolução*: Inserir a diretiva `/// <reference lib="webworker" />` na primeira linha do `sw.ts`.
