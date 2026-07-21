@@ -2,20 +2,28 @@
 
 import { requireAuth } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
+
+const disciplinaSchema = z.object({
+  nome: z.string().min(1, { message: "O nome é obrigatório." }),
+  professor_id: z.string().uuid({ message: "O professor é obrigatório." }),
+  turma_id: z.string().uuid({ message: "A turma é obrigatória." })
+})
 
 export async function addDisciplina(formData: FormData) {
   const { supabase } = await requireAuth()
-  const nome = formData.get('nome') as string
-  const professor_id = formData.get('professor_id') as string
-  const turma_id = formData.get('turma_id') as string
-
-  if (!nome || !professor_id || !turma_id) return { error: 'O nome, professor e turma são obrigatórios.' }
-
-  const { error } = await supabase.from('disciplinas').insert({ nome, professor_id, turma_id })
   
-  if (error) {
-    return { error: error.message }
-  }
+  const result = disciplinaSchema.safeParse({
+    nome: formData.get('nome'),
+    professor_id: formData.get('professor_id'),
+    turma_id: formData.get('turma_id')
+  })
+
+  if (!result.success) return { error: result.error.issues[0].message }
+  const data = result.data
+
+  const { error } = await supabase.from('disciplinas').insert(data)
+  if (error) return { error: error.message }
 
   revalidatePath('/provas-si-admin/disciplinas')
   return { success: true }
@@ -23,18 +31,21 @@ export async function addDisciplina(formData: FormData) {
 
 export async function editDisciplina(formData: FormData) {
   const { supabase } = await requireAuth()
-  const id = formData.get('id') as string
-  const nome = formData.get('nome') as string
-  const professor_id = formData.get('professor_id') as string
-  const turma_id = formData.get('turma_id') as string
-
-  if (!id || !nome || !professor_id || !turma_id) return { error: 'O ID, nome, professor e turma são obrigatórios.' }
-
-  const { error } = await supabase.from('disciplinas').update({ nome, professor_id, turma_id }).eq('id', id)
   
-  if (error) {
-    return { error: error.message }
-  }
+  const id = formData.get('id') as string
+  if (!id) return { error: 'ID da disciplina obrigatório.' }
+
+  const result = disciplinaSchema.safeParse({
+    nome: formData.get('nome'),
+    professor_id: formData.get('professor_id'),
+    turma_id: formData.get('turma_id')
+  })
+
+  if (!result.success) return { error: result.error.issues[0].message }
+  const data = result.data
+
+  const { error } = await supabase.from('disciplinas').update(data).eq('id', id)
+  if (error) return { error: error.message }
 
   revalidatePath('/provas-si-admin/disciplinas')
   return { success: true }
@@ -44,9 +55,7 @@ export async function deleteDisciplina(id: string) {
   const { supabase } = await requireAuth()
   const { error } = await supabase.from('disciplinas').delete().eq('id', id)
   
-  if (error) {
-    return { error: error.message }
-  }
+  if (error) return { error: error.message }
 
   revalidatePath('/provas-si-admin/disciplinas')
   return { success: true }

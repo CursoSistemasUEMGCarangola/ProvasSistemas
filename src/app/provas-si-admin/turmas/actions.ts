@@ -2,34 +2,58 @@
 
 import { requireAuth } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
+
+const turmaSchema = z.object({
+  nome: z.string().min(1, { message: "O nome é obrigatório." }),
+  semestre_nome: z.string().min(1, { message: "O semestre é obrigatório." })
+})
+
+// Função auxiliar (DRY) para buscar ou criar o semestre
+async function findOrCreateSemestre(supabase: any, semestre_nome: string) {
+  let { data: semestre } = await supabase
+    .from('semestres')
+    .select('id')
+    .eq('nome', semestre_nome)
+    .maybeSingle()
+
+  if (semestre?.id) {
+    return semestre.id
+  }
+
+  const { data: newSemestre, error: createError } = await supabase
+    .from('semestres')
+    .insert({ nome: semestre_nome, ativo: true })
+    .select('id')
+    .single()
+      
+  if (createError) {
+    throw new Error('Erro ao criar o semestre: ' + createError.message)
+  }
+  
+  return newSemestre.id
+}
 
 export async function addTurma(formData: FormData) {
   const { supabase } = await requireAuth()
-  const nome = formData.get('nome') as string
-  const semestre_nome = formData.get('semestre_nome') as string
+  
+  const result = turmaSchema.safeParse({
+    nome: formData.get('nome'),
+    semestre_nome: formData.get('semestre_nome')
+  })
 
-  if (!nome || !semestre_nome) return { error: 'O nome e o semestre são obrigatórios.' }
+  if (!result.success) return { error: result.error.issues[0].message }
+  const { nome, semestre_nome } = result.data
 
-  let { data: semestre } = await supabase.from('semestres').select('id').eq('nome', semestre_nome).maybeSingle()
-
-  let semestre_id = semestre?.id
-
-  if (!semestre_id) {
-    const { data: newSemestre, error: createError } = await supabase
-      .from('semestres')
-      .insert({ nome: semestre_nome, ativo: true })
-      .select('id')
-      .single()
-      
-    if (createError) return { error: 'Erro ao criar o semestre: ' + createError.message }
-    semestre_id = newSemestre.id
+  let semestre_id;
+  try {
+    semestre_id = await findOrCreateSemestre(supabase, semestre_nome)
+  } catch (err: any) {
+    return { error: err.message }
   }
 
   const { error } = await supabase.from('turmas').insert({ nome, semestre_id })
-  
-  if (error) {
-    return { error: error.message }
-  }
+  if (error) return { error: error.message }
 
   revalidatePath('/provas-si-admin/turmas')
   return { success: true }
@@ -37,32 +61,27 @@ export async function addTurma(formData: FormData) {
 
 export async function editTurma(formData: FormData) {
   const { supabase } = await requireAuth()
+  
   const id = formData.get('id') as string
-  const nome = formData.get('nome') as string
-  const semestre_nome = formData.get('semestre_nome') as string
+  if (!id) return { error: 'ID da turma obrigatório.' }
 
-  if (!id || !nome || !semestre_nome) return { error: 'ID, nome e semestre são obrigatórios.' }
+  const result = turmaSchema.safeParse({
+    nome: formData.get('nome'),
+    semestre_nome: formData.get('semestre_nome')
+  })
 
-  let { data: semestre } = await supabase.from('semestres').select('id').eq('nome', semestre_nome).maybeSingle()
+  if (!result.success) return { error: result.error.issues[0].message }
+  const { nome, semestre_nome } = result.data
 
-  let semestre_id = semestre?.id
-
-  if (!semestre_id) {
-    const { data: newSemestre, error: createError } = await supabase
-      .from('semestres')
-      .insert({ nome: semestre_nome, ativo: true })
-      .select('id')
-      .single()
-      
-    if (createError) return { error: 'Erro ao criar o semestre: ' + createError.message }
-    semestre_id = newSemestre.id
+  let semestre_id;
+  try {
+    semestre_id = await findOrCreateSemestre(supabase, semestre_nome)
+  } catch (err: any) {
+    return { error: err.message }
   }
 
   const { error } = await supabase.from('turmas').update({ nome, semestre_id }).eq('id', id)
-  
-  if (error) {
-    return { error: error.message }
-  }
+  if (error) return { error: error.message }
 
   revalidatePath('/provas-si-admin/turmas')
   return { success: true }
@@ -72,9 +91,7 @@ export async function deleteTurma(id: string) {
   const { supabase } = await requireAuth()
   const { error } = await supabase.from('turmas').delete().eq('id', id)
   
-  if (error) {
-    return { error: error.message }
-  }
+  if (error) return { error: error.message }
 
   revalidatePath('/provas-si-admin/turmas')
   return { success: true }

@@ -2,19 +2,26 @@
 
 import { requireAuth } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
+
+const professorSchema = z.object({
+  nome: z.string().min(1, { message: "O nome é obrigatório." }),
+  email: z.string().email({ message: "E-mail inválido." }).or(z.literal(''))
+})
 
 export async function addProfessor(formData: FormData) {
   const { supabase } = await requireAuth()
-  const nome = formData.get('nome') as string
-  const email = formData.get('email') as string
-
-  if (!nome) return { error: 'O nome é obrigatório.' }
-
-  const { error } = await supabase.from('professores').insert({ nome, email })
   
-  if (error) {
-    return { error: error.message }
-  }
+  const result = professorSchema.safeParse({
+    nome: formData.get('nome'),
+    email: formData.get('email') || ''
+  })
+
+  if (!result.success) return { error: result.error.issues[0].message }
+  const data = result.data
+
+  const { error } = await supabase.from('professores').insert(data)
+  if (error) return { error: error.message }
 
   revalidatePath('/provas-si-admin/professores')
   return { success: true }
@@ -22,17 +29,20 @@ export async function addProfessor(formData: FormData) {
 
 export async function editProfessor(formData: FormData) {
   const { supabase } = await requireAuth()
-  const id = formData.get('id') as string
-  const nome = formData.get('nome') as string
-  const email = formData.get('email') as string
-
-  if (!id || !nome) return { error: 'O ID e o nome são obrigatórios.' }
-
-  const { error } = await supabase.from('professores').update({ nome, email }).eq('id', id)
   
-  if (error) {
-    return { error: error.message }
-  }
+  const id = formData.get('id') as string
+  if (!id) return { error: 'ID do professor obrigatório.' }
+
+  const result = professorSchema.safeParse({
+    nome: formData.get('nome'),
+    email: formData.get('email') || ''
+  })
+
+  if (!result.success) return { error: result.error.issues[0].message }
+  const data = result.data
+
+  const { error } = await supabase.from('professores').update(data).eq('id', id)
+  if (error) return { error: error.message }
 
   revalidatePath('/provas-si-admin/professores')
   return { success: true }
@@ -42,9 +52,7 @@ export async function deleteProfessor(id: string) {
   const { supabase } = await requireAuth()
   const { error } = await supabase.from('professores').delete().eq('id', id)
   
-  if (error) {
-    return { error: error.message }
-  }
+  if (error) return { error: error.message }
 
   revalidatePath('/provas-si-admin/professores')
   return { success: true }
