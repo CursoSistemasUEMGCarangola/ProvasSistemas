@@ -45,7 +45,7 @@ export function DisciplinasClient({ disciplinas, professores, turmas }: { discip
             Nova Disciplina
           </DialogTrigger>
           <DialogContent>
-            <form action={handleAddOrEdit}>
+            <form action={handleAddOrEdit} key={editingItem?.id || 'new'}>
               <DialogHeader>
                 <DialogTitle>{editingItem ? 'Editar Disciplina' : 'Adicionar Disciplina'}</DialogTitle>
                 <DialogDescription>
