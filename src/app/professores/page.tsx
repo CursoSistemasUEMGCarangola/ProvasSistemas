@@ -29,11 +29,9 @@ export default async function ProfessoresPage() {
             <p className="text-muted-foreground text-sm font-medium uppercase tracking-wider mt-1">Sistemas de Informação - UEMG Carangola</p>
           </div>
           <div className="mt-4 sm:mt-0">
-            <Button asChild variant="outline" className="gap-2 border-primary/20 hover:bg-primary/5 text-primary">
-              <Link href="/">
-                <ArrowLeft className="h-4 w-4" />
-                Voltar ao Calendário
-              </Link>
+            <Button render={<Link href="/" />} variant="outline" className="gap-2 border-primary/20 hover:bg-primary/5 text-primary">
+              <ArrowLeft className="h-4 w-4" />
+              Voltar ao Calendário
             </Button>
           </div>
         </div>

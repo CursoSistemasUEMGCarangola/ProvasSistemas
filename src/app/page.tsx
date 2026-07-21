@@ -70,10 +70,8 @@ export default async function PublicHome() {
                   {doc.titulo}
                 </Button>
               ))}
-              <Button asChild variant="default" className="w-full sm:w-auto gap-2 bg-primary text-white hover:bg-primary/90">
-                <Link href="/professores">
-                  Agenda dos Professores
-                </Link>
+              <Button render={<Link href="/professores" />} variant="default" className="w-full sm:w-auto gap-2 bg-primary text-white hover:bg-primary/90">
+                Agenda dos Professores
               </Button>
             </div>
           </div>
