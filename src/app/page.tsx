@@ -84,6 +84,20 @@ export default async function PublicHome() {
           <ExamBoard exams={exams || []} turmas={turmas || []} />
         </section>
       </main>
+
+      {/* Footer Institucional */}
+      <footer className="mt-16 bg-white dark:bg-card border-t border-border py-8">
+        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="text-sm text-muted-foreground text-center md:text-left">
+            &copy; {new Date().getFullYear()} Sistemas de Informação - UEMG Carangola.
+          </div>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+            <Link href="/sobre" className="hover:text-primary transition-colors underline underline-offset-4">Sobre o Projeto</Link>
+            <Link href="/termos" className="hover:text-primary transition-colors underline underline-offset-4">Termos de Uso</Link>
+            <Link href="/privacidade" className="hover:text-primary transition-colors underline underline-offset-4">Política de Privacidade</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
