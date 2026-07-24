@@ -23,25 +23,15 @@ export default function SobrePage() {
 
       <main className="max-w-3xl mx-auto px-4 mt-8 space-y-8 bg-white p-8 rounded-lg shadow-sm border border-border">
         <section className="prose prose-slate dark:prose-invert max-w-none">
-          <h2>Sobre o Sistema</h2>
+          <h2>Sobre o Projeto</h2>
           <p>
-            O "Calendário de Provas - SI UEMG Carangola" é um sistema institucional voltado para a organização,
-            divulgação e consulta das datas de avaliações do curso de Sistemas de Informação. 
+            O projeto de extensão "Calendário de Provas Digital: Integração e Acessibilidade Acadêmica", registrado no sistema SIGA sob o número 26408 e proposto pelo professor Nilton Freitas Junior, consiste no desenvolvimento e implementação de uma aplicação móvel voltada para os discentes do curso de Sistemas de Informação da UEMG Unidade Carangola. O objetivo central é facilitar o acesso ao cronograma de avaliações, centralizando informações que, embora definidas institucionalmente, muitas vezes carecem de um canal de consulta ágil e portátil.
           </p>
-
-          <h2>O Problema que Resolvemos</h2>
           <p>
-            Desenvolvido sob medida para solucionar desafios de comunicação acadêmica, a plataforma evita 
-            choques de horário entre disciplinas, ajuda na organização dos professores e garante que nenhum 
-            aluno perca as datas de suas avaliações.
+            Desenvolvido sob o paradigma No-Code através da plataforma Glide, o aplicativo prioriza a usabilidade e a eficiência, permitindo que os estudantes consultem datas e horários de provas de forma instantânea. Além do calendário, a ferramenta atua como um repositório de informações essenciais, disponibilizando os regulamentos que regem as avaliações da UEMG e a relação dos docentes que atuam em cada período letivo.
           </p>
-
-          <h2>PWA: O Aplicativo na Palma da Mão</h2>
           <p>
-            Construímos o sistema priorizando dispositivos móveis (<strong>Mobile-first</strong>). Ao utilizar a plataforma 
-            em seu celular, é possível instalá-la como um aplicativo nativo (PWA - Progressive Web App).
-            Dessa forma, os alunos podem acessar as datas com um único clique direto da tela inicial, com maior
-            velocidade e resiliência a oscilações de internet.
+            A iniciativa busca promover a organização acadêmica e a democratização da informação no ambiente universitário. Ao utilizar uma tecnologia de rápido desenvolvimento e baixo custo de manutenção, o projeto demonstra como soluções tecnológicas simplificadas podem resolver problemas logísticos cotidianos, melhorando a comunicação interna e o planejamento dos estudantes ao longo do semestre.
           </p>
           
           <h2>Tecnologia de Ponta</h2>
