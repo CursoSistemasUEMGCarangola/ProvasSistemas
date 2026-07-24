@@ -25,20 +25,21 @@ export default function SobrePage() {
         <section className="prose prose-slate dark:prose-invert max-w-none">
           <h2>Sobre o Projeto</h2>
           <p>
-            O projeto de extensão "Calendário de Provas Digital: Integração e Acessibilidade Acadêmica", registrado no sistema SIGA sob o número 26408 e proposto pelo professor Nilton Freitas Junior, consiste no desenvolvimento e implementação de uma aplicação móvel voltada para os discentes do curso de Sistemas de Informação da UEMG Unidade Carangola. O objetivo central é facilitar o acesso ao cronograma de avaliações, centralizando informações que, embora definidas institucionalmente, muitas vezes carecem de um canal de consulta ágil e portátil.
+            O projeto de extensão "Calendário de Provas Digital: Integração e Acessibilidade Acadêmica", registrado no sistema SIGA sob o número 26408 e proposto pelo professor Nilton Freitas Junior, consiste no desenvolvimento e implementação de um sistema institucional voltado para a organização, divulgação e consulta das datas de avaliações do curso de Sistemas de Informação da UEMG Unidade Carangola.
           </p>
           <p>
-            Desenvolvido sob o paradigma No-Code através da plataforma Glide, o aplicativo prioriza a usabilidade e a eficiência, permitindo que os estudantes consultem datas e horários de provas de forma instantânea. Além do calendário, a ferramenta atua como um repositório de informações essenciais, disponibilizando os regulamentos que regem as avaliações da UEMG e a relação dos docentes que atuam em cada período letivo.
+            O objetivo central é facilitar o acesso ao cronograma de avaliações, centralizando informações que muitas vezes carecem de um canal de consulta ágil. A plataforma evita choques de horário entre disciplinas, ajuda na organização dos professores e garante que nenhum aluno perca as datas de suas avaliações.
           </p>
+
+          <h2>O Aplicativo na Palma da Mão</h2>
           <p>
-            A iniciativa busca promover a organização acadêmica e a democratização da informação no ambiente universitário. Ao utilizar uma tecnologia de rápido desenvolvimento e baixo custo de manutenção, o projeto demonstra como soluções tecnológicas simplificadas podem resolver problemas logísticos cotidianos, melhorando a comunicação interna e o planejamento dos estudantes ao longo do semestre.
+            Construído priorizando dispositivos móveis (<strong>Mobile-first</strong>), o sistema permite instalação como um aplicativo nativo (PWA - Progressive Web App). Dessa forma, os alunos podem acessar as datas e documentos institucionais com um único clique direto da tela inicial, com maior velocidade e usabilidade.
           </p>
           
           <h2>Tecnologia de Ponta</h2>
           <p>
-            Apoiado na arquitetura <em>Serverless</em> através da Vercel, o sistema utiliza frameworks de ponta
-            como Next.js (App Router), React 19, e banco de dados relacional Supabase com PostgreSQL. 
-            O projeto também conta com adaptação inteligente de temas para suportar períodos de "Vedação Eleitoral" institucionalmente.
+            Substituindo versões e plataformas anteriores, o projeto atual é apoiado em uma arquitetura <em>Serverless</em> através da Vercel. O sistema utiliza tecnologias modernas do ecossistema JavaScript/TypeScript, como Next.js (App Router), React 19, Tailwind CSS e banco de dados relacional PostgreSQL via Supabase. 
+            O projeto também conta com segurança reforçada e adaptação inteligente de temas para suportar os períodos de "Vedação Eleitoral" da instituição.
           </p>
 
           <hr />
