@@ -4,7 +4,7 @@ Este documento atua como um registro cumulativo de decisões arquiteturais, vuln
 
 ## Segurança e Zero Trust
 
-* **[Segurança] Server Actions Públicas no App Router**: O uso do `middleware.ts` para proteger rotas da interface (ex: `/admin/*`) **não bloqueia invocações diretas às Server Actions** caso a assinatura do endpoint seja descoberta. 
+* **[Segurança] Server Actions Públicas no App Router**: O uso do `middleware.ts` para proteger rotas da interface (ex: `/admin/*`) **não bloqueia invocações diretas às Server Actions** caso a assinatura do endpoint seja descoberta.
   * *Resolução*: Foi criado o helper `requireAuth()` dentro do utilitário Supabase (`src/utils/supabase/server.ts`) para garantir o princípio de Confiança Zero. Qualquer ação que modifique o banco (`actions.ts`) agora deve invocar a checagem imperativa da sessão (`const { supabase, user } = await requireAuth()`), bloqueando ataques CSRF/Direct-call.
 
 ## Funcionalidade e Regras de Negócio
@@ -17,3 +17,10 @@ Este documento atua como um registro cumulativo de decisões arquiteturais, vuln
   * *Resolução*: No `package.json`, usar `next build --webpack` em vez de apenas `next build`.
 * **[TypeScript] Escopo do Service Worker**: Um arquivo `sw.ts` customizado falhará no build de tipagem pois o Next.js não carrega o objeto `ServiceWorkerGlobalScope`.
   * *Resolução*: Inserir a diretiva `/// <reference lib="webworker" />` na primeira linha do `sw.ts`.
+
+## Regras de Negócio de Interface (UI/UX)
+
+* **[UX/Regra de Negócio] Representação de Horários EaD**: Provas na modalidade EaD que possuam o horário base de banco de dados gravado como "00:00" devem ser formatadas no front-end para exibir o texto "EaD" em vez da hora zerada.
+  * *Resolução*: Implementado `const displayTime = formattedTime === '00:00' ? 'EaD' : formattedTime` na tabela da "Agenda dos Professores" (`ProfessoresBoard.tsx`) para traduzir a informação visualmente ao aluno/professor sem afetar as queries.
+
+* **[UX/Design Pattern] Tabelas com Overflow em Mobile**: Sempre que utilizar a classe `overflow-x-auto` em tabelas (`<Table>`) encapsuladas por `div` no shadcn/ui, deve-se incluir uma dica visual explícita para dispositivos móveis (`md:hidden`), pois a quebra reta da borda não deixa evidente a capacidade de rolagem horizontal para o usuário.

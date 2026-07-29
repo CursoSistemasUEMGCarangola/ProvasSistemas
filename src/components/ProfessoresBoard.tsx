@@ -77,6 +77,9 @@ export function ProfessoresBoard({ provas }: ProfessoresBoardProps) {
                 </div>
               </AccordionTrigger>
               <AccordionContent className="pt-4 pb-6">
+                <div className="md:hidden flex items-center justify-center gap-2 pb-2 text-xs font-medium text-muted-foreground/80 animate-pulse">
+                  <span>↔️ Deslize horizontalmente para ver mais</span>
+                </div>
                 <div className="border rounded-md overflow-x-auto bg-white">
                   <Table>
                     <TableHeader>
@@ -92,11 +95,12 @@ export function ProfessoresBoard({ provas }: ProfessoresBoardProps) {
                         const dateObj = new Date(p.data_hora_inicio)
                         const formattedDate = dateObj.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })
                         const formattedTime = dateObj.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' })
+                        const displayTime = formattedTime === '00:00' ? 'EaD' : formattedTime
                         return (
                           <TableRow key={p.id}>
                             <TableCell className="whitespace-nowrap">
                               <span className="font-semibold text-gray-900">{formattedDate}</span><br />
-                              <span className="text-xs font-medium text-muted-foreground">{formattedTime}</span>
+                              <span className="text-xs font-medium text-muted-foreground">{displayTime}</span>
                             </TableCell>
                             <TableCell className="font-medium">{p.disciplinas?.nome || '-'}</TableCell>
                             <TableCell>{p.turmas?.nome || '-'}</TableCell>
