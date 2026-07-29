@@ -24,3 +24,8 @@ Este documento atua como um registro cumulativo de decisões arquiteturais, vuln
   * *Resolução*: Implementado `const displayTime = formattedTime === '00:00' ? 'EaD' : formattedTime` na tabela da "Agenda dos Professores" (`ProfessoresBoard.tsx`) para traduzir a informação visualmente ao aluno/professor sem afetar as queries.
 
 * **[UX/Design Pattern] Tabelas com Overflow em Mobile**: Sempre que utilizar a classe `overflow-x-auto` em tabelas (`<Table>`) encapsuladas por `div` no shadcn/ui, deve-se incluir uma dica visual explícita para dispositivos móveis (`md:hidden`), pois a quebra reta da borda não deixa evidente a capacidade de rolagem horizontal para o usuário.
+
+## Segurança de Banco de Dados
+
+* **[SEC] RLS Desabilitado em Tabelas de Domínio e Configuração**: O Supabase alerta como falha crítica a criação de tabelas (`configuracoes`, `tipos_avaliacao`) sem a ativação explícita do RLS (Row Level Security). Caso não seja habilitado, atacantes anônimos podem inserir, apagar ou modificar registros estruturais do sistema usando a API exposta.
+  * *Resolução*: Foi ativado o `ENABLE ROW LEVEL SECURITY` para as tabelas. Adotou-se o padrão Zero Trust do projeto, criando policies de `SELECT USING (true)` (garantindo o SSR no Front-end público) e policies `FOR ALL USING (auth.role() = 'authenticated')` (blindando a mutação apenas para o Coordenador autenticado). Qualquer nova tabela de metadados deve nascer com esse mesmo padrão.
