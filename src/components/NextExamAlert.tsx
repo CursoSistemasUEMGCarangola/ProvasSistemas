@@ -9,7 +9,7 @@ export function NextExamAlert({ exam }: { exam: Prova | null }) {
   const dateObj = new Date(exam.data_hora_inicio)
   const formattedDate = dateObj.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo', weekday: 'long', day: '2-digit', month: 'long' })
   const formattedTime = dateObj.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' })
-  const timeDisplay = formattedTime === '00:00' ? '' : ` às ${formattedTime}`;
+  const timeDisplay = formattedTime === '00:00' ? ' - EaD' : ` às ${formattedTime}`;
 
   return (
     <Card className="border-l-4 border-l-secondary shadow-md bg-secondary/5 [--card-spacing:0.5rem]">
