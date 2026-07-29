@@ -46,3 +46,6 @@ supabase-info.md
 # ai context
 .ai
 .ai/
+
+# SQL scripts
+sql/schema.sql
