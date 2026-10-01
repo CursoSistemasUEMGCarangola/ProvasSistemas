@@ -29,14 +29,18 @@ export function ExamBoard({ exams, turmas }: { exams: Prova[], turmas: Turma[] }
     })
   }, [exams, search, turmaFilter, tipoFilter])
 
-  const nextExam = filteredExams.length > 0 ? filteredExams[0] : null
+  const nextExams = useMemo(() => {
+    if (filteredExams.length === 0) return []
+    const firstTime = new Date(filteredExams[0].data_hora_inicio).getTime()
+    return filteredExams.filter(exam => new Date(exam.data_hora_inicio).getTime() === firstTime)
+  }, [filteredExams])
 
   return (
     <div className="space-y-6">
       {/* Alerta da Próxima Prova Dinâmico */}
       <section>
-        {nextExam ? (
-          <NextExamAlert exam={nextExam} />
+        {nextExams.length > 0 ? (
+          <NextExamAlert exams={nextExams} />
         ) : (
           <div className="bg-green-50 text-green-800 p-4 rounded-xl border border-green-200 text-center shadow-sm">
             <h3 className="font-bold text-lg">Tudo tranquilo!</h3>

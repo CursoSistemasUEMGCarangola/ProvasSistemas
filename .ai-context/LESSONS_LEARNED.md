@@ -25,6 +25,9 @@ Este documento atua como um registro cumulativo de decisões arquiteturais, vuln
 
 * **[UX/Design Pattern] Tabelas com Overflow em Mobile**: Sempre que utilizar a classe `overflow-x-auto` em tabelas (`<Table>`) encapsuladas por `div` no shadcn/ui, deve-se incluir uma dica visual explícita para dispositivos móveis (`md:hidden`), pois a quebra reta da borda não deixa evidente a capacidade de rolagem horizontal para o usuário.
 
+* **[BUG/UI] Omissão de Provas Simultâneas no Alerta da Próxima Prova**: O componente `NextExamAlert` recebia apenas o primeiro índice do array filtrado (`filteredExams[0]`), ocultando outras avaliações marcadas para o mesmo dia e horário (ex.: turmas distintas realizando provas no mesmo horário).
+  * *Resolução*: No `ExamBoard.tsx`, foi implementado o agrupamento `nextExams` via `useMemo` filtrando todos os exames com o mesmo timestamp de `data_hora_inicio` do primeiro registro. O `NextExamAlert.tsx` foi refatorado para suportar `exams: Prova[]`, renderizando o cabeçalho de data/horário unificado e a listagem de todas as disciplinas/turmas daquele horário.
+
 ## Segurança de Banco de Dados
 
 * **[SEC] RLS Desabilitado em Tabelas de Domínio e Configuração**: O Supabase alerta como falha crítica a criação de tabelas (`configuracoes`, `tipos_avaliacao`) sem a ativação explícita do RLS (Row Level Security). Caso não seja habilitado, atacantes anônimos podem inserir, apagar ou modificar registros estruturais do sistema usando a API exposta.
