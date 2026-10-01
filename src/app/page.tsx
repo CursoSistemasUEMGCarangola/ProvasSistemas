@@ -4,6 +4,7 @@ import { ExamBoard } from '@/components/ExamBoard'
 import { Button } from '@/components/ui/button'
 import { FileDown } from 'lucide-react'
 import Link from 'next/link'
+import { getBrasiliaStartOfToday } from '@/lib/utils'
 
 export const revalidate = 0 // Dynamic page
 
@@ -20,14 +21,11 @@ export default async function PublicHome() {
   // Buscar todas as turmas para o filtro
   const { data: turmas } = await supabase.from('turmas').select('*').order('nome')
 
-  // Buscar todas as provas futuras (a partir de hoje)
-  const today = new Date()
-  today.setUTCHours(0,0,0,0)
-
+  // Buscar todas as provas futuras (a partir do início de hoje no fuso de Brasília)
   const { data: rawExams } = await supabase
     .from('provas')
     .select('*, disciplinas(nome, professores(nome)), turmas(nome)')
-    .gte('data_hora_inicio', today.toISOString())
+    .gte('data_hora_inicio', getBrasiliaStartOfToday())
 
   let exams = rawExams || []
   exams.sort((a, b) => {

@@ -3,6 +3,7 @@
 import { requireAuth } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
+import { getBrasiliaDayBounds } from '@/lib/utils'
 
 const provaSchema = z.object({
   disciplina_id: z.string().uuid({ message: "Disciplina inválida" }),
@@ -14,18 +15,14 @@ const provaSchema = z.object({
 
 // Função auxiliar (DRY) para checar se a turma já tem prova naquele dia
 async function checkTurmaConflict(supabase: any, turmaId: string, dataHoraInicioIso: string, idToExclude?: string) {
-  const startOfDay = new Date(dataHoraInicioIso)
-  startOfDay.setUTCHours(0, 0, 0, 0)
-  
-  const endOfDay = new Date(dataHoraInicioIso)
-  endOfDay.setUTCHours(23, 59, 59, 999)
+  const { startOfDay, endOfDay } = getBrasiliaDayBounds(dataHoraInicioIso)
 
   let query = supabase
     .from('provas')
     .select('id, data_hora_inicio')
     .eq('turma_id', turmaId)
-    .gte('data_hora_inicio', startOfDay.toISOString())
-    .lte('data_hora_inicio', endOfDay.toISOString())
+    .gte('data_hora_inicio', startOfDay)
+    .lte('data_hora_inicio', endOfDay)
 
   if (idToExclude) {
     query = query.neq('id', idToExclude)

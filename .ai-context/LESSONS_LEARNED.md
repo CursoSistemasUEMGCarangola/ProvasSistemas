@@ -11,6 +11,9 @@ Este documento atua como um registro cumulativo de decisões arquiteturais, vuln
 
 * **[Provas] Checagem de Choque de Horário**: A regra de impedir que uma turma tenha provas sobrepostas ou na mesma data exigiu manipulação de Timezones via JS para construir os limiares `startOfDay` e `endOfDay` (UTC) antes de delegar a filtragem `gte` e `lte` para o Supabase.
 
+* **[BUG/TIMEZONE] Falso Início de Dia via UTC (setUTCHours)**: O uso direto de `today.setUTCHours(0, 0, 0, 0)` para filtrar avaliações futuras (`gte`) gera o timestamp `YYYY-MM-DDT00:00:00.000Z`, que no fuso de Brasília (`America/Sao_Paulo`, UTC-3) corresponde às **21:00 do dia anterior**. Isso fazia com que avaliações noturnas realizadas na véspera continuassem sendo retornadas pelo Supabase e ocupassem indevidamente o card "Fique Atento: Próxima Prova".
+  * *Resolução*: Centralizou-se em `src/lib/utils.ts` as funções `getBrasiliaStartOfToday()` e `getBrasiliaDayBounds()`, utilizando a API nativa `Intl.DateTimeFormat` ancorada em `America/Sao_Paulo`. O início do dia brasileiro (00:00:00-03:00) converte-se precisamente para `03:00:00.000Z` em UTC, expurgando em definitivo qualquer avaliação ocorrida na noite anterior tanto na página pública quanto na agenda docente e na verificação de choque no admin.
+
 ## Infraestrutura e Vercel Build
 
 * **[Build] Conflito Turbopack vs PWA Plugins**: O build Vercel quebra (Deprecation/Plugin Error) com bibliotecas como `@serwist/next` devido à imposição do Turbopack nas versões recentes do Next.js.
